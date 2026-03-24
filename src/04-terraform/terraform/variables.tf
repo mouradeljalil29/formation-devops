@@ -1,3 +1,36 @@
+variable "region" {
+  description = "Région Scaleway"
+  type        = string
+  default     = "pl-waw"
+}
+
+variable "zone" {
+  description = "Zone Scaleway"
+  type        = string
+  default     = "pl-waw-2"
+}
+
+variable "access_key" {
+  type = string
+  sensitive = true
+}
+
+variable "secret_key" {
+  type = string
+  sensitive = true
+}
+
+variable "organization_id" {
+  type = string
+  sensitive = true
+}
+
+variable "project_id" {
+  type = string
+  sensitive = true
+}
+
+
 variable "app_name" {
   description = "Nom de l'application — utilisé comme préfixe des ressources"
   type        = string
@@ -14,20 +47,8 @@ variable "environment" {
   }
 }
 
-variable "region" {
-  description = "Région Scaleway"
-  type        = string
-  default     = "fr-par"
-}
-
-variable "zone" {
-  description = "Zone Scaleway"
-  type        = string
-  default     = "fr-par-1"
-}
-
 variable "instance_type" {
   description = "Type d'instance Scaleway"
   type        = string
-  default     = "DEV2-2"
+  default     = "STARDUST1-S"
 }

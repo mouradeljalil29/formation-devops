@@ -176,7 +176,7 @@ level: 2
 **Objectif :** ajouter Prometheus + Grafana + Loki à l'application fil rouge
 
 ```bash
-cd devops-formation-app/05-observability/
+cd formation-devops/05-observability/
 
 # Démarrer la stack applicative + monitoring
 docker compose -f docker-compose.yml \

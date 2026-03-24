@@ -26,7 +26,7 @@ level: 2
 <div class="grid grid-cols-2 gap-8 mt-4">
 
 <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
-  <strong>Infra manuelle (Snowflake)</strong>
+  <strong>Infra manuelle</strong>
   <ul class="mt-2 text-sm">
     <li>Créée via une interface graphique</li>
     <li>Documentée dans un wiki (souvent obsolète)</li>
@@ -111,7 +111,7 @@ level: 2
 
 ```mermaid
 %%{init: {'theme': 'forest'}}%%
-flowchart TD
+flowchart LR
   GH["GitHub Actions\nPipeline CD"] --> SCW_REG["Container Registry\nScaleway"]
   SCW_REG --> INSTANCE["Instance Compute\nDEV2-2 (2 vCPU / 2 Go RAM)"]
   INSTANCE --> APP["Application\nNode.js + Nginx"]
@@ -149,7 +149,7 @@ terraform {
 resource "scaleway_instance_server" "app" {
   type  = "DEV2-2"
   image = "ubuntu_jammy"
-  name  = "devops-formation-app"
+  name  = "formation-devops"
   tags  = ["formation", "devops"]
 }
 ```
@@ -189,7 +189,7 @@ level: 2
   <strong>✅ Faire</strong>
   <ul class="mt-2 text-sm">
     <li>Infra versionnée et reviewable → Automatisation + Partage (CALMS)</li>
-    <li>No snowflake servers → Culture de l'éphémère</li>
+    <li>Pas de serveur long terme → Culture de l'éphémère</li>
     <li>State en remote + locking → Collaboration fiable</li>
     <li><code>terraform plan</code> en CI avant tout <code>apply</code></li>
     <li>Approbation humaine du plan en PR avant apply</li>
@@ -219,27 +219,14 @@ level: 2
 
 **Objectif :** provisionner l'instance et le container registry via Terraform, déclenché depuis le pipeline
 
-```bash
-cd devops-formation-app/04-terraform/
+📄 Les étapes détaillées sont décrites dans [src/04-terraform/README.md](../src/04-terraform/README.md) :
 
-# Initialiser Terraform (télécharge le provider Scaleway)
-terraform init
-
-# Voir ce qui va être créé sans rien modifier
-terraform plan
-
-# Appliquer (crée l'instance et le registry sur Scaleway)
-terraform apply
-
-# Observer dans la console Scaleway : instance créée
-# Récupérer l'IP en output Terraform
-terraform output instance_ip
-```
-
-**À explorer :**
-1. Modifier la taille de l'instance dans `variables.tf` → observer le `plan`
-2. Ajouter un tag → voir le diff minimal dans le `plan`
-3. Observer le state remote dans le bucket Object Storage Scaleway
+1. **Installation** — CLI Scaleway (`scw`) et Terraform
+2. **Configuration API** — création de la clé API, authentification, variables d'environnement
+3. **State remote** — bucket Object Storage Scaleway (optionnel mais recommandé en équipe)
+4. **Workflow** — `terraform init` → `terraform plan` → `terraform apply` → `terraform output`
+5. **Exercices** — changer le type d'instance, ajouter un tag, inspecter le state
+6. **Nettoyage** — `terraform destroy`
 
 ---
 level: 2

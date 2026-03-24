@@ -168,8 +168,8 @@ level: 2
     <li>Committer directement sur main</li>
     <li>Branches "longues" qui divergent</li>
     <li>Merger sans CI verte</li>
-    <li>Revue de code formelle sans feedback</li>
-    <li>Un seul reviewer systématique (bus factor)</li>
+    <li>Revue de code sans retour constructif</li>
+    <li>Un seul relecteur systématique (facteur d'indispensabilité)</li>
   </ul>
 </div>
 
@@ -183,12 +183,13 @@ level: 2
 
 > Outil utilisé dans ce TP : **GitHub**. Les concepts sont identiques sur GitLab, Bitbucket ou toute autre forge Git.
 
-**Objectif :** initialiser le repo `devops-formation-app` avec une stratégie de branches
+**Objectif :** initialiser le repo `formation-devops` avec une stratégie de branches
 
 ```bash
-# Effectuer un fork de 
-git clone <url-repo>
-cd devops-formation-app/01-gitflow/
+# Effectuer un fork de https://github.com/mathieulaude/formation-devops
+# Clone votre repo en local
+git clone <votre-repo>
+cd formation-devops
 
 # Créer la branche develop
 git checkout -b develop
@@ -209,6 +210,6 @@ transition: slide-right
 
 # Débrief et validation
 
-- Votre équipe utilise-t-elle GitFlow ou Trunk-Based ? Pourquoi ?
-- Combien de temps vivent vos branches en moyenne ?
-- Quel impact une branche de 3 semaines a-t-elle sur le lead time DORA ?
+- Pour le projet fil rouge, quelle stratégie de branches avez-vous choisie ? Quels critères ont guidé ce choix ?
+- Dans le TP, combien de temps s'est écoulé entre votre premier commit et l'intégration dans `develop` ? Comment réduire ce délai ?
+- Imaginez une branche ouverte 3 semaines sans être intégrée : quelles difficultés concrètes cela crée-t-il au moment du merge ?

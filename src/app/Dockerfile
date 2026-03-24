@@ -1,12 +1,12 @@
 # Étape 1 : build avec les dépendances de dev pour les tests
-FROM node:20-alpine AS builder
+FROM node:25-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY src/ ./src/
 
 # Étape 2 : image de production minimale
-FROM node:20-alpine AS production
+FROM node:25-alpine AS production
 WORKDIR /app
 
 # Créer un utilisateur non-root dédié

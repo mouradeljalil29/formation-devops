@@ -23,7 +23,7 @@ level: 2
 
 # CI vs CD : les définitions
 
-| | Continuous Integration | Continuous Delivery | Continuous Deployment |
+| | **Continuous Integration** | **Continuous Delivery** | **Continuous Deployment** |
 |---|---|---|---|
 | **Objectif** | Valider chaque commit | Toujours prêt à déployer | Déploiement automatique en prod |
 | **Déclencheur** | Chaque push | Chaque merge sur main | Chaque merge sur main |
@@ -169,17 +169,14 @@ level: 2
 **Objectif :** déployer automatiquement l'image de l'app sur une instance Scaleway
 
 ```bash
-cd devops-formation-app/03-cd-scaleway/
-# .github/workflows/cd.yml + secrets configurés au préalable
-
-# Secrets à configurer dans GitHub (Settings → Secrets) :
-# SCW_ACCESS_KEY, SCW_SECRET_KEY, SCW_INSTANCE_IP
-
-# Pousser sur main → observer le pipeline CI passer → CD se déclencher
-git push origin main
-# Vérifier dans l'onglet Actions : job "deploy-staging"
-# Approuver le déploiement prod dans l'interface GitHub Environments
+# Voir 03-cd-scaleway/README.md
 ```
+
+**Sécurité :**
+- Ne jamais stocker les secrets dans le code ou dans un fichier .env versionné
+- Utiliser des clés SSH Ed25519 (plus courtes et plus sûres que RSA)
+- Restreindre les droits IAM Scaleway au strict minimum (principe moindre privilège)
+- Faire tourner les secrets régulièrement
 
 **À explorer :**
 1. Introduire un bug → observer le pipeline bloquer avant staging
@@ -196,3 +193,7 @@ transition: slide-right
 - Quelle stratégie de déploiement correspond le mieux à la tolérance aux risques de votre équipe ?
 - Comment éviter qu'un secret soit accidentellement affiché dans les logs d'un pipeline ?
 - Pourquoi Staging identique à Prod est-il une règle non négociable ?
+
+<div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+  💡 <strong>Pensez à supprimer votre instance Scaleway + IP + Stockage</strong>
+</div>

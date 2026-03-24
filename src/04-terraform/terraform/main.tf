@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.7"
+  required_version = ">= 1.5"
   required_providers {
     scaleway = {
       source  = "scaleway/scaleway"
@@ -21,8 +21,12 @@ terraform {
 }
 
 provider "scaleway" {
-  zone   = var.zone
-  region = var.region
+  zone            = var.zone
+  region          = var.region
+  access_key      = var.access_key
+  secret_key      = var.secret_key
+  organization_id = var.organization_id
+  project_id      = var.project_id
 }
 
 # ------------------------------------------------------------------ #
@@ -54,7 +58,7 @@ resource "scaleway_instance_security_group" "app" {
 resource "scaleway_instance_server" "app" {
   name              = var.app_name
   type              = var.instance_type
-  image             = "ubuntu_jammy"
+  image             = "930a4b65-67b6-4bc5-ba51-2c55dfda7856" # Ubuntu 24.04
   ip_id             = scaleway_instance_ip.app.id
   security_group_id = scaleway_instance_security_group.app.id
   tags              = ["formation", "devops", var.environment]
@@ -64,13 +68,4 @@ resource "scaleway_instance_server" "app" {
       app_name = var.app_name
     })
   }
-}
-
-# ------------------------------------------------------------------ #
-# Container Registry                                                   #
-# ------------------------------------------------------------------ #
-resource "scaleway_registry_namespace" "app" {
-  name       = "registry-${var.app_name}"
-  region     = var.region
-  is_public  = false
 }

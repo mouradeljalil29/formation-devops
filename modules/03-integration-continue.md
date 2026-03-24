@@ -58,20 +58,18 @@ Chaque étape est indépendante, versionnée, reproductible. L'échec d'une éta
 
 ---
 level: 2
+layout: two-cols-header
+layoutClass: gap-4
 ---
 
 # Pipeline as code
 
-Le pipeline CI est **un fichier texte versionné dans le dépôt**, au même titre que le code applicatif.
+Le pipeline est **un fichier texte versionné dans le dépôt**, au même titre que le code applicatif.
 
-Avantages :
-- Reviewable (PR, historique, diff)
-- Reproductible sur n'importe quelle machine
-- Évolution traçable
-
+::left::
 Chaque outil CI a son format :
 
-| Outil | Fichier |
+| **Outil** | **Fichier** |
 |---|---|
 | GitHub Actions | `.github/workflows/*.yml` |
 | GitLab CI | `.gitlab-ci.yml` |
@@ -79,13 +77,35 @@ Chaque outil CI a son format :
 | Jenkins | `Jenkinsfile` |
 | CircleCI | `.circleci/config.yml` |
 
+::right::
+Avantages :
+- Reviewable (PR, historique, diff)
+- Reproductible sur n'importe quelle machine
+- Évolution traçable
+
 ---
 level: 2
+layout: two-cols
+layoutClass: gap-4
 ---
 
-# Structure d'un workflow CI (exemple GitHub Actions)
+# Structure d'un pipeline
+Exemple avec GitHub Actions
 
-```yaml
+<ul>
+<li v-click>les <strong>déclencheurs</strong> : quand le pipeline s'exécute (à chaque push, à l'<strong>ouverture</strong> d'une PR, selon un calendrier…)</li>
+<li v-click>les <strong>tâches</strong> : unités d'exécution indépendantes, parallélisables ou enchaînées (<code>needs</code>), chacune tournant sur une machine distincte</li>
+<li v-click>les <strong>étapes</strong> : suite ordonnée d'actions à l'intérieur d'une tâche (récupérer le code, installer les dépendances, lancer les tests…)</li>
+</ul>
+<br>
+<div  v-click>
+
+> La syntaxe `on / jobs / steps` est propre à GitHub Actions
+> GitLab CI parle de `rules / stages / script`, Jenkins de `triggers / stages / steps`.
+</div>
+
+::right::
+```yaml {1-2|1-7|1-11,20-22|all}{at: 1}
 # .github/workflows/ci.yml
 name: CI
 
@@ -98,9 +118,9 @@ jobs:
   lint-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with: { node-version: '25' }
       - run: npm ci
       - run: npm run lint
       - run: npm test
@@ -109,12 +129,10 @@ jobs:
     needs: lint-and-test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Build Docker image
         run: docker build -t app:${{ github.sha }} .
 ```
-
-> Cet exemple illustre le TP. La structure `on / jobs / steps` est propre à GitHub Actions — chaque outil a ses équivalents.
 
 ---
 level: 2
@@ -125,6 +143,7 @@ level: 2
 **Artefacts :** fichiers produits par le pipeline (binaires, images Docker, rapports de tests) conservés pour les étapes suivantes ou téléchargés
 
 **Cache :** répertoires réutilisés entre pipelines pour accélérer (ex: `node_modules`, cache Maven)
+
 → Toujours lier le cache à un hash du fichier de dépendances (`package-lock.json`, `pom.xml`)
 
 **Matrice :** exécuter le même job sur plusieurs combinaisons (versions Node 18/20/22, OS Linux/Windows)
@@ -141,9 +160,13 @@ level: 2
 
 Après le build, l'image Docker est **publiée dans un registre** accessible à l'étape de déploiement :
 
-```
-Développeur  →  Pipeline CI  →  Container Registry  →  Pipeline CD  →  Production
-                               (images taguées)
+```mermaid
+%%{init: {'theme': 'forest'}}%%
+flowchart LR
+  DEV["👩‍💻 Développeur\ngit push"] --> CI["🔧 Pipeline CI\nlint · test · build"]
+  CI --> REG["📦 Container Registry\nimage taguée :abc1234"]
+  REG --> CD["🚀 Pipeline CD\npull & deploy"]
+  CD --> PROD["🌐 Production"]
 ```
 
 Registres courants : Docker Hub, GitHub Container Registry (ghcr.io), GitLab Registry, Harbor, Scaleway Container Registry…
@@ -193,12 +216,14 @@ level: 2
 **Objectif :** créer un pipeline CI complet sur l'application fil rouge
 
 ```bash
-cd devops-formation-app/02-ci-pipeline/
-# Le fichier .github/workflows/ci.yml est déjà présent
+git checkout develop
+git checkout -b feature/ci-pipeline
 
+# Copier le fichier src/02-ci-pipeline/ci.yml dans .github/workflows
 # Observer la structure : jobs lint-and-test, build, publish
 # Pousser une modification et observer l'exécution dans l'onglet Actions
-git add .
+
+git add .github/
 git commit -m "feat: add CI pipeline"
 git push origin feature/ci-pipeline
 # Ouvrir une PR → observer le pipeline se déclencher
@@ -207,7 +232,7 @@ git push origin feature/ci-pipeline
 **À explorer :**
 1. Faire échouer un test → observer la notification
 2. Modifier le Dockerfile de l'app → vérifier que l'image se build bien
-3. Constater le cache `node_modules` sur un second run
+3. Constater le cache `docker` sur un second run
 
 ---
 level: 2

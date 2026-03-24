@@ -195,7 +195,7 @@ level: 2
 **Objectif :** ajouter les jobs de sécurité dans le workflow CI de l'app fil rouge
 
 ```bash
-cd devops-formation-app/06-devsecops/
+cd formation-devops/06-devsecops/
 # 3 jobs ajoutés dans .github/workflows/ci.yml :
 # secret-scan, sast, image-scan
 

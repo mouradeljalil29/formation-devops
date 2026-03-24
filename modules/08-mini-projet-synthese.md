@@ -23,7 +23,7 @@ level: 2
 
 # Présentation de la stack cassée
 
-Le répertoire `devops-formation-app/` contient une stack intentionnellement dégradée sur 6 dimensions :
+Le répertoire `formation-devops/` contient une stack intentionnellement dégradée sur 6 dimensions :
 
 | Couche | Problème introduit |
 |---|---|
@@ -60,7 +60,7 @@ level: 2
 
 ```bash
 # Cloner le répertoire de départ (état cassé)
-cd devops-formation-app/
+cd formation-devops/
 
 # 1. Observer l'état du pipeline sur GitHub Actions
 #    → Identifier les jobs en échec
